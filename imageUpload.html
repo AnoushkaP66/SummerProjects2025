@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Steganography Scanner</title>
+  <style>
+    body {
+      font-family: fantasy, papyrus;
+      background: #000000;
+      color: #333;
+      border: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #537f0b;
+      margin-bottom: 20px;
+    }
+
+    .upload-container {
+      background: #3a0e0e;
+      padding: 25px 30px;
+      border: #d6b628;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(110, 73, 73, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input[type="file"] {
+      margin: 10px 0 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #d6b628;
+      color: rgb(0, 0, 0);
+      border: rgb(161, 133, 62);
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      position: relative; /* Essential for positioning pseudo-elements */
+      overflow: hidden; /* Ensures the explosion stays within the button's bounds initially */
+      padding: 15px 30px;
+      background-color: rgb(58, 4, 4);
+      color: rgb(0, 0, 0);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #2980b9;
+    }
+
+    pre {
+      background: #ecf0f1;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-width: 600px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Steganography Scanner</h1>
+
+  <div class="upload-container">
+    <input type="file" id="imageInput" accept="image/*" />
+    <br />
+    <button onclick="uploadImage()">Scan Image</button>
+  </div>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function uploadImage() {
+      const fileInput = document.getElementById('imageInput');
+      const resultEl = document.getElementById('result');
+      resultEl.textContent = "";
+
+      if (!fileInput.files.length) {
+        alert('Please select an image first.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('image', file);
+
+      resultEl.textContent = "Uploading and scanning...";
+
+      try {
+        const response = await fetch('/scan', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error('Server error: ' + response.statusText);
+        }
+
+        const text = await response.text();
+        resultEl.textContent = "Decoded Message:\n\n" + text;
+      } catch (e) {
+        resultEl.textContent = "Error: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
