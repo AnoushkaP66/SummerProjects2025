@@ -1,5 +1,5 @@
 # SummerProjects2025
-These are projects I have completed in the Summer of 2025.
+Various projects completed in Summer 2025. Some can be found in the main branch while others have their own branches.
 
 # Dice Roller
 This is a simply dice roller created with the PySimpleGUI library. The user can choose the type of dice they want to roll. This can be useful for board games or TTRPG.
